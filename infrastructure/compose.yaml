@@ -1,0 +1,43 @@
+services:
+  postgres:
+    container_name: investment-postgres
+    image: 'postgres:16.6'
+    environment:
+      - 'POSTGRES_DB=investment'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=admin'
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - investment-network
+
+  pgadmin:
+    container_name: investment-pgamdin
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=administrador
+    ports:
+      - '5433:80'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - investment-network
+
+volumes:
+    pgdata:
+      name: pgdata
+    pgadmin-data:
+      name: pgadmin-data
+
+networks:
+  investment-network:
+    # Specify driver options
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+
