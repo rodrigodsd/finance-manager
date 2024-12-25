@@ -10,16 +10,6 @@ CREATE TABLE IF NOT EXISTS investor (
 
 CREATE INDEX IF NOT EXISTS idx_investor_personal_id ON investor(personal_id);
 
-CREATE TABLE IF NOT EXISTS resource (
-    id SERIAL PRIMARY KEY,
-    code VARCHAR(40) NOT NULL,
-    description VARCHAR(200) NOT NULL,
-    investor_id bigint not null ,
-    constraint fk_resource_investor foreign key (investor_id) references investor
-);
-
-CREATE INDEX IF NOT EXISTS idx_resource_personal_id ON investor(personal_id);
-
 -- Create a function to update the updated_at field
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -40,3 +30,51 @@ EXCEPTION
     WHEN duplicate_object THEN
         RAISE NOTICE 'Trigger already exists. Ignoring...';
 END$$;
+
+CREATE TABLE IF NOT EXISTS resource (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(40) NOT NULL,
+    description VARCHAR(200) NOT NULL,
+    investor_id INTEGER not null ,
+    constraint fk_resource_investor foreign key (investor_id) references investor(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_resource_investor_id ON resource(investor_id);
+
+CREATE TABLE IF NOT EXISTS asset (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(40) NOT NULL,
+    code_isin VARCHAR(40) NOT NULL,
+    description VARCHAR(120) NOT NULL,
+    industry VARCHAR(40),
+    sector VARCHAR(40),
+    segment VARCHAR(40),
+    type VARCHAR(40),
+    price NUMERIC(16,2)
+);
+
+CREATE INDEX IF NOT EXISTS idx_asset_type ON asset(type);
+CREATE INDEX IF NOT EXISTS idx_asset_sector ON asset(sector);
+CREATE INDEX IF NOT EXISTS idx_asset_segment ON asset(segment);
+
+CREATE TABLE IF NOT EXISTS portfolio (
+    id SERIAL PRIMARY KEY,
+    investor_id INTEGER NOT NULL,
+    name VARCHAR(40) NOT NULL,
+    description VARCHAR(120),
+    constraint fk_portfolio_investor foreign key (investor_id) references investor(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_portfolio_investor_id ON portfolio(investor_id);
+
+CREATE TABLE IF NOT EXISTS portfolio_asset (
+    id SERIAL PRIMARY KEY,
+    portfolio_id INTEGER NOT NULL,
+    asset_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    price_avarage NUMERIC,
+    constraint fk_portifolio_asset_portfolio foreign key (portfolio_id) references portfolio(id),
+    constraint fk_portifolio_asset_asset foreign key (asset_id) references asset(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_portfolio_asset_portfolio_id ON portfolio_asset(portfolio_id);
