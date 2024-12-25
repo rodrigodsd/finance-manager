@@ -21,4 +21,7 @@ public interface InvestorRepository extends CrudRepository<Investor, Long> {
 
     @Cacheable(INVESTOR_CACHE_KEY)
     Optional<Investor> findByPersonalId(Integer personalId);
+
+    @Cacheable(INVESTOR_CACHE_KEY)
+    Optional<Investor> findByUserlogin(String username);
 }

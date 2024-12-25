@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/investor")
 public class InvestorController {
 
-    private InvestorService investorService;
+    private final InvestorService investorService;
 
     public InvestorController(InvestorService investorService) {
         this.investorService = investorService;
     }
 
-    @PostMapping
+    @PostMapping("/signin")
     public Investor saveInvestor(@RequestBody Investor investor){
         return investorService.saveInvestor(investor);
     }

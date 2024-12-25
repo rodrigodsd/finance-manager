@@ -9,6 +9,13 @@ spring:
     username: admin
     password: admin
     driver-class-name: org.postgresql.Driver
+jwt:
+  public:
+    key: classpath:investmentapp.pub
+  private:
+    key: classpath:investmentapp
+  token:
+    expiry: 3600
 
 logging:
   level:
@@ -17,3 +24,4 @@ logging:
         jdbc:
           core:
             JdbcTemplate: DEBUG
+        security: TRACE

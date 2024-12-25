@@ -7,4 +7,6 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     //TODO treat NoSuchElementException
 
     // TODO treat IllegalArgumentException
+
+    // TODO treat UsernameNotFoundException
 }
