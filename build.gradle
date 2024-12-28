@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.apache.poi:poi-ooxml:5.3.0'
 	//implementation 'org.springframework.modulith:spring-modulith-starter-core'
 	//implementation 'org.springframework.modulith:spring-modulith-starter-jdbc'
 	//developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
