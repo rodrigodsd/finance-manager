@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return investorRepository.findByUserlogin(username)
+        return investorRepository.findByUsername(username)
                 .map(UserSession::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }

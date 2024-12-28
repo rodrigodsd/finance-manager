@@ -8,6 +8,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Table
-public record Investor(@Id Long id, Integer personalId, String userlogin, String username, String password,
+public record Investor(@Id Long id, Integer personalId, String name, String username, String password,
                        @Column("investor_id") Set<Resource> resources) implements Serializable {
 }

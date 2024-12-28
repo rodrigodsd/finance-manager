@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorizeHttp -> {
-                            authorizeHttp.requestMatchers("/").permitAll();
+                            authorizeHttp.requestMatchers("/auth").permitAll();
                             authorizeHttp.requestMatchers("/favicon.svg").permitAll();
                             authorizeHttp.requestMatchers("/css/*").permitAll();
                             authorizeHttp.requestMatchers("/error").permitAll();
@@ -44,7 +44,6 @@ public class SecurityConfiguration {
                             authorizeHttp.anyRequest().authenticated();
                         }
                 )
-
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(
                         conf -> conf.jwt(Customizer.withDefaults())

@@ -25,6 +25,10 @@ public class UserSession implements UserDetails {
         return investor.password();
     }
 
+    public Investor getInvestor() {
+        return investor;
+    }
+
     @Override
     public String getUsername() {
         return investor.username();
