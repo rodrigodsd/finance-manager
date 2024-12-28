@@ -2,48 +2,56 @@ package com.frederico.investiments.portfolio;
 
 import com.frederico.investiments.portfolio.domain.Portfolio;
 import com.frederico.investiments.portfolio.domain.Position;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Optional;
 
 public enum PositionMapper {
     ASSET("Acoes"),
-    BDR("BDR"),
+    BDR("BDR") {
+        @Override
+        public Position parse(Row row, Portfolio portfolio) {
+            var isin = getCellValueAsString(row.getCell(4));
+            return new Position(null, portfolio.id(),
+                    getCellValueAsString(row.getCell(3)),
+                    StringUtils.isNoneEmpty(isin) ? StringUtils.left(isin, 12) : "",
+                    getCellValueAsDouble(row.getCell(8)), null);
+        }
+    },
     ETF("ETF"),
     FII("Fundo de Investimento"),
-    FIXED_INCOME("Renda Fixa"){
+    FIXED_INCOME("Renda Fixa") {
         @Override
-        public Position mapper(Row row, Portfolio portfolio) {
+        public Position parse(Row row, Portfolio portfolio) {
             return new Position(null, portfolio.id(),
                     getCellValueAsString(row.getCell(3)),
                     null,
-                    getCellValueAsDouble(row.getCell(8)),null);
+                    getCellValueAsDouble(row.getCell(8)), null);
         }
     },
-    TREASURIES("Tesouro Direto"){
+    TREASURIES("Tesouro Direto") {
         @Override
-        public Position mapper(Row row, Portfolio portfolio) {
+        public Position parse(Row row, Portfolio portfolio) {
             return new Position(null, portfolio.id(),
                     getCellValueAsString(row.getCell(2)),
                     null,
-                    getCellValueAsDouble(row.getCell(5)),null);
+                    getCellValueAsDouble(row.getCell(5)), null);
         }
     };
 
-    private String assetType;
+    private final String assetName;
 
     PositionMapper(String sheetName) {
-        assetType = sheetName;
+        assetName = sheetName;
     }
 
-    //mapper for variable income asset
-    public Position mapper(Row row, Portfolio portfolio){
-      return new Position(null, portfolio.id(),
-              getCellValueAsString(row.getCell(3)),
-              getCellValueAsString(row.getCell(5)),
-              getCellValueAsDouble(row.getCell(8)),null);
+    public static Optional<PositionMapper> findByName(String name) {
+        return Arrays.stream(values()).filter(mapper -> mapper.getAssetName().equalsIgnoreCase(name)).findFirst();
     }
 
     private static String getCellValueAsString(Cell cell) {
@@ -86,7 +94,16 @@ public enum PositionMapper {
         }
     }
 
-    public String getAssetType() {
-        return assetType;
+    //mapper for variable income asset
+    public Position parse(Row row, Portfolio portfolio) {
+        var isin = getCellValueAsString(row.getCell(5));
+        return new Position(null, portfolio.id(),
+                getCellValueAsString(row.getCell(3)),
+                StringUtils.isNoneEmpty(isin) ? StringUtils.left(isin, 12) : "",
+                getCellValueAsDouble(row.getCell(8)), null);
+    }
+
+    private String getAssetName() {
+        return assetName;
     }
 }

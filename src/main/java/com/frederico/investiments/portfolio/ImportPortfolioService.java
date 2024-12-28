@@ -2,7 +2,9 @@ package com.frederico.investiments.portfolio;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+
 public interface ImportPortfolioService {
-    void importPortfolio(MultipartFile file, String portfolioName, Long investorId) throws Exception;
+    HashMap<String, Integer> importPortfolio(MultipartFile file, String portfolioName, Long investorId) throws Exception;
 
 }

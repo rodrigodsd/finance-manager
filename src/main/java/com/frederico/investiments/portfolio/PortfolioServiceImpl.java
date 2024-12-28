@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PortfolioServiceImpl implements PortfolioService {
 
-    private PortfolioRepository portfolioRepository;
+    private final PortfolioRepository portfolioRepository;
 
     public PortfolioServiceImpl(PortfolioRepository portfolioRepository) {
         this.portfolioRepository = portfolioRepository;

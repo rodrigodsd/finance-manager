@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class InvestimentsApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(InvestimentsApplication.class, args);
+
+		//var modules = ApplicationModules.of(InvestimentsApplication.class);
+		//modules.forEach(System.out::println);
+
 	}
 
 //    @Bean

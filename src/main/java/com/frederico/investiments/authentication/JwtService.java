@@ -1,7 +1,5 @@
 package com.frederico.investiments.authentication;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,16 +9,14 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
 
+    private final JwtEncoder encoder;
     @Value("${jwt.token.expiry}")
     private String expiry;
-
-    private final JwtEncoder encoder;
 
     public JwtService(JwtEncoder encoder) {
         this.encoder = encoder;
@@ -39,7 +35,7 @@ public class JwtService {
                 .expiresAt(now.plusSeconds(Long.parseLong(expiry)))
                 .subject(authentication.getName())
                 .claim("scopes", scopes)
-                .claim("investorId", ((UserSession)authentication.getPrincipal()).getInvestor().id())
+                .claim("investorId", ((UserSession) authentication.getPrincipal()).getInvestor().id())
                 .build();
 
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

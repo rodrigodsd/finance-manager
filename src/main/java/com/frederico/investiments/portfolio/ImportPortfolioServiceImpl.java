@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.yaml.snakeyaml.util.Tuple;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -37,7 +38,7 @@ public class ImportPortfolioServiceImpl implements ImportPortfolioService {
     }
 
     @Override
-    public void importPortfolio(MultipartFile file, String portfolioName, Long investorId) throws Exception {
+    public HashMap<String, Integer> importPortfolio(MultipartFile file, String portfolioName, Long investorId) throws Exception {
 
         // It puts the file in server directory
         //uploadFile(file);
@@ -46,19 +47,20 @@ public class ImportPortfolioServiceImpl implements ImportPortfolioService {
         var portfolio = portfolioService.save(new Portfolio(null, investorId, portfolioName, null));
 
         // Parse file to Positions
+        Tuple<List<Position>, HashMap<String, Integer>> tupleResult;
         try (InputStream is = file.getInputStream()) {
-            List<Position> positions = ExcelParserUtil.parseExcelFile(is, portfolio);
+            tupleResult = ExcelParserUtil.parseExcelFile(is, portfolio);
+            List<Position> positions = tupleResult._1();
             var results = positions.stream()
                     .map(positionService::save)
                     .toList();
-            logger.info("{}",results.size());
+            logger.info("{}", results.size());
         } catch (IOException e) {
             logger.error("IOException occurred while processing file", e);
             throw new IOException(e.getMessage(), e);
-        } catch (Exception e) {
-            logger.error("Unexpected error occurred", e);
-            throw new Exception(e.getMessage(), e);
         }
+
+        return tupleResult._2();
 
     }
 

@@ -1,4 +1,4 @@
-package com.frederico.investiments.user;
+package com.frederico.investiments.common;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;

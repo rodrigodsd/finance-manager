@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/portfolio")
@@ -27,7 +26,7 @@ public class PortfolioController {
     }
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes,
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
                                         @RequestParam("portfolioName") String portfolioName) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,9 +51,8 @@ public class PortfolioController {
             return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         }
 
-        importPortfolioService.importPortfolio(file, portfolioName, investorId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(importPortfolioService.importPortfolio(file, portfolioName, investorId));
     }
 
 }

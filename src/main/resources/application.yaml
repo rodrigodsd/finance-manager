@@ -56,6 +56,6 @@ logging:
     com:
       zaxxer:
         hikari:
-          HikariConfig: DEBUG
-          nodeValue: TRACE
+          HikariConfig: INFO
+          nodeValue: INFO
 

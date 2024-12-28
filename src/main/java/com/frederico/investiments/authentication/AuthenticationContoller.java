@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationContoller {
 
+    // TODO treat exception for expired token to drop exception and externalized as response
+
     public final AuthenticationService authenticationService;
 
     public AuthenticationContoller(AuthenticationService authenticationService) {
