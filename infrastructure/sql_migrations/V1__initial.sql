@@ -67,14 +67,15 @@ CREATE TABLE IF NOT EXISTS portfolio (
 
 CREATE INDEX IF NOT EXISTS idx_portfolio_investor_id ON portfolio(investor_id);
 
-CREATE TABLE IF NOT EXISTS portfolio_asset (
+CREATE TABLE IF NOT EXISTS portfolio_position (
     id SERIAL PRIMARY KEY,
     portfolio_id INTEGER NOT NULL,
-    asset_id INTEGER NOT NULL,
-    quantity INTEGER NOT NULL,
-    price_avarage NUMERIC,
-    constraint fk_portifolio_asset_portfolio foreign key (portfolio_id) references portfolio(id),
-    constraint fk_portifolio_asset_asset foreign key (asset_id) references asset(id)
+    code VARCHAR(40) NOT NULL,
+    code_isin VARCHAR(40),
+    description VARCHAR(120),
+    quantity NUMERIC(10,2) NOT NULL,
+    price_avarage NUMERIC(10,2),
+    constraint fk_portfolio_asset_portfolio foreign key (portfolio_id) references portfolio(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_portfolio_asset_portfolio_id ON portfolio_asset(portfolio_id);
+CREATE INDEX IF NOT EXISTS idx_portfolio_position_portfolio_id ON portfolio_position(portfolio_id);
