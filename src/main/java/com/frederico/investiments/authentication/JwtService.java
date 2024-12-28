@@ -1,5 +1,7 @@
 package com.frederico.investiments.authentication;
 
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +11,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,11 +36,14 @@ public class JwtService {
         var claims = JwtClaimsSet.builder()
                 .issuer("investment-project")
                 .issuedAt(now)
-                .expiresAt(now.plusSeconds(Long.getLong(expiry)))
+                .expiresAt(now.plusSeconds(Long.parseLong(expiry)))
                 .subject(authentication.getName())
                 .claim("scopes", scopes)
+                .claim("investorId", ((UserSession)authentication.getPrincipal()).getInvestor().id())
                 .build();
 
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+
 }
